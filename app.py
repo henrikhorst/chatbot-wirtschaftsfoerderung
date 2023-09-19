@@ -4,6 +4,8 @@ import langchain
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 import os 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
@@ -41,9 +43,10 @@ FRAGE: {question}
 ENDANTWORT:"""
 
 llm=ChatOpenAI(temperature=0)
+embeddings = OpenAIEmbeddings()
 
-with open("faiss_store_openai.pkl", "rb") as f:
-    VectorStore = pickle.load(f)
+# load from disk
+db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
 
 GERMAN_QA_PROMPT = PromptTemplate(template=template, input_variables=["summaries", "question"])
 GERMAN_DOC_PROMPT = PromptTemplate(
@@ -53,7 +56,7 @@ GERMAN_DOC_PROMPT = PromptTemplate(
 qa_chain = load_qa_with_sources_chain(llm, chain_type="stuff",
                                       prompt=GERMAN_QA_PROMPT,
                                       document_prompt=GERMAN_DOC_PROMPT) 
-chain = RetrievalQAWithSourcesChain(combine_documents_chain=qa_chain, retriever=VectorStore.as_retriever(),
+chain = RetrievalQAWithSourcesChain(combine_documents_chain=qa_chain, retriever=db.as_retriever(),
                                      reduce_k_below_max_tokens=True, max_tokens_limit=3375,
                                      return_source_documents=True)
 
