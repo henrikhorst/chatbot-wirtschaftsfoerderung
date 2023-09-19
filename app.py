@@ -1,5 +1,6 @@
 import streamlit as st
 import pickle
+import langchain
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
