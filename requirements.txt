@@ -1,2 +1,4 @@
-langchain[all]
+langchain
+openai
+tiktoken
 streamlit

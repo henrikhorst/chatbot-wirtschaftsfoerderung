@@ -5,6 +5,8 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
+import os 
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 BASE_URL = "https://luebeck.org/"
 
@@ -38,7 +40,7 @@ FRAGE: {question}
 {summaries}
 ENDANTWORT:"""
 
-llm=ChatOpenAI(temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"])
+llm=ChatOpenAI(temperature=0)
 
 with open("faiss_store_openai.pkl", "rb") as f:
     VectorStore = pickle.load(f)
