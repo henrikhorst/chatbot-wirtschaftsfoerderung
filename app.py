@@ -9,6 +9,10 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 import os 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+# these three lines swap the stdlib sqlite3 lib with the pysqlite3 package
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 BASE_URL = "https://luebeck.org/"
 
