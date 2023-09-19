@@ -44,7 +44,7 @@ FRAGE: {question}
 {summaries}
 ENDANTWORT:"""
 
-llm=ChatOpenAI(temperature=0)
+llm=ChatOpenAI(temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"])
 
 with open("faiss_store_openai.pkl", "rb") as f:
     VectorStore = pickle.load(f)
