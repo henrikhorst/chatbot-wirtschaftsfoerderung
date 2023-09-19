@@ -1,8 +1,3 @@
-from dotenv import load_dotenv
-
-# Load .env file
-load_dotenv()
-
 import streamlit as st
 import pickle
 import faiss
